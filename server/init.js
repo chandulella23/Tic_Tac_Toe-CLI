@@ -1,15 +1,14 @@
 require('dotenv').config();
 require("./../constant/help.js");
 let error = require("./../constant/error.js");
-let Gameplay = require("./../controllers/gameplay.js");
 
 let game = {
-    started : false,
-    turn : '',
-    is_input : false,
-    matrix : 3,
-    board : [],
-    empty : []
+    started: false,
+    user_assigned_value: null,
+    turn: 'O',
+    matrix: 3,
+    board: [],
+    players : ['X','O']
 };
 
 process.stdin.setEncoding('utf8');
@@ -18,10 +17,24 @@ process.stdin.on("data", input => {
 });
 
 function start(input) {
-    if(!game.started) {
-        require('./../routes/command.js')(input,game);
+    check = checkEnteredInput(input);
+    if(check) {
+        require('./../routes/command.js')(input, game);
     } else {
-        Gameplay.checkRoute(input,game);
+        console.log(error.printCorrectInput)
+    }
+}
+
+function checkEnteredInput(input) {
+    if (input) {
+        let inputVal = input.trim().split(' ');
+        if (inputVal && inputVal[0] === './ttt' ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 
 }
